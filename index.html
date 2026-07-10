@@ -29,16 +29,12 @@
     <!-- ✨ Mouse Follower Light (Desktop spotlight effect) -->
     <div class="spotlight" id="spotlight"></div>
 
-    <!-- 🧊 Floating Glass Navbar -->
-    <header class="glass-navbar">
+    <!-- 🧊 Minimal Floating Brand Header -->
+    <header class="brand-header">
         <div class="logo">
-            <span class="logo-text">BORMEY.<span id="dev-text">DEV</span></span>
-        </div>
-        <div class="nav-right">
-            <button id="lang-switcher" class="nav-icon-btn" aria-label="Switch Language" title="Switch Language" data-lang="en">
-                KH
-            </button>
-            <a href="#contact-form" class="nav-contact-btn" data-translate="get_in_touch">Get In Touch</a>
+            <span class="logo-text">
+                <span class="logo-brand">BORMEY.</span><span id="dev-text" data-text="DEV"><span class="glitch-char char-d" data-text="D"><span class="char-base">D</span><span class="char-piece piece-1" data-text="D">D</span><span class="char-piece piece-2" data-text="D">D</span></span><span class="glitch-char char-e" data-text="E"><span class="char-base">E</span><span class="char-piece piece-1" data-text="E">E</span><span class="char-piece piece-2" data-text="E">E</span></span><span class="glitch-char char-v" data-text="V"><span class="char-base">V</span><span class="char-piece piece-1" data-text="V">V</span><span class="char-piece piece-2" data-text="V">V</span></span><span class="glitch-slice slice-1" data-text="DEV">DEV</span><span class="glitch-slice slice-2" data-text="DEV">DEV</span><span class="glitch-slice slice-3" data-text="DEV">DEV</span><span class="glitch-slice slice-4" data-text="DEV">DEV</span></span>
+            </span>
         </div>
     </header>
 
@@ -76,7 +72,7 @@
                 <a href="https://github.com/MEYYYNASH" target="_blank" class="btn-icon-link" aria-label="GitHub">
                     <i class="fa-brands fa-github"></i>
                 </a>
-                <a href="mailto:contact@example.com" class="btn-icon-link" aria-label="Email">
+                <a href="#" id="email-link" class="btn-icon-link" aria-label="Email">
                     <i class="fa-solid fa-envelope"></i>
                 </a>
                 <a href="#" class="btn-icon-link" id="resume-link" aria-label="Resume">
@@ -88,18 +84,7 @@
         <!-- 📑 Profile Content Tabs Section -->
         <section class="content-section glass-panel animate-fade-in delay-2">
             
-            <!-- Navigation Tabs -->
-            <nav class="tab-nav">
-                <button class="tab-btn active" data-tab="bio-tab">
-                    <i class="fa-solid fa-fingerprint"></i> <span data-translate="tab_bio">Bio & Story</span>
-                </button>
-                <button class="tab-btn" data-tab="skills-tab">
-                    <i class="fa-solid fa-code"></i> <span data-translate="tab_skills">Tech Stack</span>
-                </button>
-                <button class="tab-btn" data-tab="works-tab">
-                    <i class="fa-solid fa-shapes"></i> <span data-translate="tab_works">Projects</span>
-                </button>
-            </nav>
+            <!-- Navigation tabs removed. Handled by macOS Dock at the bottom -->
 
             <!-- Tabs Container -->
             <div class="tab-container">
@@ -258,6 +243,87 @@
 
 
     </main>
+
+    <!-- 🖥️ macOS Dock Navigation -->
+    <div class="mac-dock-container">
+        <nav class="mac-dock" id="mac-dock">
+            <button class="dock-item active" data-tab="bio-tab">
+                <i class="fa-solid fa-fingerprint"></i>
+                <span class="dock-tooltip" data-translate="tab_bio">Bio & Story</span>
+                <span class="dock-dot"></span>
+            </button>
+            <button class="dock-item" data-tab="skills-tab">
+                <i class="fa-solid fa-terminal"></i>
+                <span class="dock-tooltip" data-translate="tab_skills">Tech Stack</span>
+                <span class="dock-dot"></span>
+            </button>
+            <button class="dock-item" data-tab="works-tab">
+                <i class="fa-solid fa-shapes"></i>
+                <span class="dock-tooltip" data-translate="tab_works">Projects</span>
+                <span class="dock-dot"></span>
+            </button>
+            <button class="dock-item" id="dock-connect-btn">
+                <i class="fa-solid fa-paper-plane"></i>
+                <span class="dock-tooltip" data-translate="dock_connect">Connect</span>
+            </button>
+            <button class="dock-item" id="dock-lang-btn">
+                <i class="fa-solid fa-globe"></i>
+                <span class="dock-tooltip" data-translate="dock_lang">Language</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- 🧊 Glassmorphic Modal for Unified Contact/Connection Selection -->
+    <div id="connect-modal" class="modal-overlay">
+        <div class="modal-container">
+            <button class="modal-close" id="connect-modal-close-btn">&times;</button>
+            <h3 class="modal-title" data-translate="connect_picker_title">Let's Connect</h3>
+            <div class="modal-options-list">
+                <a href="https://t.me/ShennCelest" target="_blank" class="modal-option-btn telegram-btn">
+                    <i class="fa-brands fa-telegram"></i>
+                    <span data-translate="connect_telegram">Telegram</span>
+                </a>
+                <a href="https://m.me/JaxFrez" target="_blank" class="modal-option-btn messenger-btn">
+                    <i class="fa-brands fa-facebook-messenger"></i>
+                    <span data-translate="connect_messenger">Messenger</span>
+                </a>
+                <button class="modal-option-btn gmail-btn" id="gmail-option-btn">
+                    <i class="fa-solid fa-envelope"></i>
+                    <span data-translate="email_picker_gmail">Gmail (Web)</span>
+                </button>
+                <button class="modal-option-btn default-btn" id="default-option-btn">
+                    <i class="fa-solid fa-square-envelope"></i>
+                    <span data-translate="email_picker_default">Default Mail App</span>
+                </button>
+                <button class="modal-option-btn copy-btn" id="copy-option-btn">
+                    <i class="fa-solid fa-copy"></i>
+                    <span data-translate="email_picker_copy">Copy Email Address</span>
+                </button>
+                <button class="modal-option-btn cv-btn" id="cv-option-btn">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span data-translate="connect_cv">Request CV / Resume</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🧊 Glassmorphic Modal for Language Selection -->
+    <div id="lang-modal" class="modal-overlay">
+        <div class="modal-container">
+            <button class="modal-close" id="lang-modal-close-btn">&times;</button>
+            <h3 class="modal-title" data-translate="lang_picker_title">Select Language</h3>
+            <div class="modal-options-list">
+                <button class="modal-option-btn lang-option-btn" id="lang-en-btn">
+                    <span style="font-weight:bold; font-size:1.1rem; width:24px; text-align:center; color:#00ffff;">EN</span>
+                    <span>English</span>
+                </button>
+                <button class="modal-option-btn lang-option-btn" id="lang-kh-btn">
+                    <span style="font-weight:bold; font-size:1.1rem; width:24px; text-align:center; color:#ff00ff;">KH</span>
+                    <span>ខ្មែរ (Khmer)</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- 🍞 Glassmorphic Toast Notification Container -->
     <div id="toast-container" class="toast-container"></div>

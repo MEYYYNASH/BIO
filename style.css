@@ -114,17 +114,39 @@ body {
     font-weight: 700;
     font-size: 1.15rem;
     letter-spacing: 1px;
+    display: inline-flex;
+    align-items: center;
+    transition: font-size 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.logo-brand {
     background: linear-gradient(135deg, #ffffff 40%, var(--text-secondary) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    transition: font-size 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: inline-block;
+    transition: transform 0.1s ease;
+}
+
+.logo-brand.tremble {
+    animation: brand-tremble 0.08s infinite;
+}
+
+@keyframes brand-tremble {
+    0% { transform: translate(0, 0); }
+    20% { transform: translate(-0.8px, 0.4px); }
+    40% { transform: translate(0.8px, -0.4px); }
+    60% { transform: translate(-0.4px, -0.8px); }
+    80% { transform: translate(0.4px, 0.8px); }
+    100% { transform: translate(0, 0); }
 }
 
 #dev-text {
     background: none;
-    -webkit-text-fill-color: initial;
-    color: #ffffff;
-    transition: color 1.2s ease-in-out;
+    -webkit-text-fill-color: #000000;
+    color: #000000;
+    position: relative;
+    display: inline-block;
+    font-weight: 900;
 }
 
 .glass-navbar.island-mode .logo-text {
@@ -1146,3 +1168,638 @@ body.font-khmer {
         gap: 0.5rem;
     }
 }
+
+/* 🧊 Glassmorphic Modal Dialog */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 15, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-container {
+    background: rgba(20, 20, 30, 0.85);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 20px rgba(0, 255, 255, 0.1),
+                0 0 40px rgba(255, 0, 255, 0.03);
+    border-radius: 20px;
+    width: 90%;
+    max-width: 420px;
+    padding: 2rem;
+    position: relative;
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-overlay.active .modal-container {
+    transform: scale(1);
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.modal-close:hover {
+    color: #ff00ff;
+    transform: rotate(90deg);
+}
+
+.modal-title {
+    font-family: var(--font-header), sans-serif;
+    color: var(--text-primary);
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.8rem;
+}
+
+.modal-options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.modal-option-btn {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-family: var(--font-body), sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    width: 100%;
+}
+
+.modal-option-btn i {
+    font-size: 1.2rem;
+    width: 24px;
+    text-align: center;
+}
+
+.modal-option-btn.gmail-btn {
+    border-color: rgba(255, 0, 255, 0.2);
+}
+.modal-option-btn.gmail-btn:hover {
+    background: rgba(255, 0, 255, 0.15);
+    border-color: #ff00ff;
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.modal-option-btn.default-btn {
+    border-color: rgba(0, 255, 255, 0.2);
+}
+.modal-option-btn.default-btn:hover {
+    background: rgba(0, 255, 255, 0.15);
+    border-color: #00ffff;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.modal-option-btn.copy-btn {
+    border-color: var(--border-color);
+}
+.modal-option-btn.copy-btn:hover {
+    background: var(--card-bg-hover);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+/* 🧊 Minimal Floating Brand Header */
+.brand-header {
+    position: fixed;
+    top: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    pointer-events: none;
+}
+.brand-header .logo {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 0.5rem 1.25rem;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    pointer-events: auto;
+}
+
+/* 🔒 Privacy Blur Rules */
+.avatar-img,
+.profile-name,
+.profile-tagline,
+.profile-summary {
+    transition: filter 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                opacity 0.4s ease, 
+                transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body.privacy-active .avatar-img {
+    filter: blur(14px) grayscale(40%);
+    opacity: 0.85;
+    transform: scale(0.98);
+}
+
+body.privacy-active .profile-name {
+    filter: blur(8px);
+    opacity: 0.9;
+}
+
+body.privacy-active .profile-tagline {
+    filter: blur(6px);
+    opacity: 0.7;
+}
+
+body.privacy-active .profile-summary {
+    filter: blur(6px);
+    opacity: 0.5;
+}
+
+/* 🖥️ macOS Dock Navigation Styles */
+.mac-dock-container {
+    position: fixed;
+    bottom: 1.25rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    z-index: 1000;
+    pointer-events: none; /* Let clicks pass through outside the dock itself */
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mac-dock-container.dock-hidden {
+    transform: translateX(-50%) translateY(calc(100% + 2rem));
+}
+
+.mac-dock {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    background: rgba(15, 15, 25, 0.35);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+    padding: 8px 12px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 15px rgba(0, 255, 255, 0.05);
+    pointer-events: auto; /* Re-enable pointer events for the dock */
+    transition: padding 0.2s ease, gap 0.2s ease;
+    height: 60px; /* Base height to anchor icons */
+}
+
+.dock-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    color: var(--text-primary);
+    width: 38px;  /* Base size */
+    height: 38px; /* Base size */
+    border-radius: 10px;
+    transition: color 0.2s ease, transform 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+    transform-origin: bottom center;
+}
+
+.dock-item i {
+    font-size: 1.2rem;
+    transition: font-size 0.15s ease;
+    pointer-events: none;
+}
+
+/* Active indicator dot */
+.dock-dot {
+    position: absolute;
+    bottom: -4px;
+    width: 4px;
+    height: 4px;
+    background-color: #00ffff;
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0);
+    transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0 0 8px #00ffff, 0 0 12px #00ffff;
+}
+
+.dock-item.active .dock-dot {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.dock-item:hover {
+    color: #ff00ff;
+}
+
+/* Dock tooltip styling */
+.dock-tooltip {
+    position: absolute;
+    bottom: 56px; /* Positioned above the icon */
+    background: rgba(15, 15, 25, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-family: var(--font-body);
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-50%) translateY(5px);
+    left: 50%;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    pointer-events: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.dock-item:hover .dock-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Adjust bottom spacing for main profile container so dock doesn't cover anything */
+.profile-container {
+    padding-bottom: 6.5rem !important;
+}
+
+/* Hover highlights for new modal items */
+.modal-option-btn.telegram-btn {
+    border-color: rgba(0, 136, 204, 0.2);
+}
+.modal-option-btn.telegram-btn:hover {
+    background: rgba(0, 136, 204, 0.15);
+    border-color: #0088cc;
+    box-shadow: 0 0 15px rgba(0, 136, 204, 0.3);
+    transform: translateY(-2px);
+}
+
+.modal-option-btn.messenger-btn {
+    border-color: rgba(0, 132, 255, 0.2);
+}
+.modal-option-btn.messenger-btn:hover {
+    background: rgba(0, 132, 255, 0.15);
+    border-color: #0084ff;
+    box-shadow: 0 0 15px rgba(0, 132, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.modal-option-btn.cv-btn {
+    border-color: rgba(255, 0, 255, 0.2);
+}
+.modal-option-btn.cv-btn:hover {
+    background: rgba(255, 0, 255, 0.15);
+    border-color: #ff00ff;
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* 📱 Responsive Dock styling */
+@media (max-width: 480px) {
+    .mac-dock {
+        gap: 5px;
+        padding: 6px 10px;
+        height: 50px;
+        border-radius: 16px;
+    }
+    
+    .dock-item {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .dock-item i {
+        font-size: 1rem;
+    }
+    
+    .dock-tooltip {
+        bottom: 44px;
+        font-size: 0.65rem;
+        padding: 4px 8px;
+    }
+}
+
+/* Hover highlights for language picker options */
+.modal-option-btn.lang-option-btn {
+    border-color: rgba(255, 255, 255, 0.05);
+}
+.modal-option-btn.lang-option-btn:hover {
+    background: rgba(0, 255, 255, 0.1);
+    border-color: #00ffff;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* 🧊 Individual Character Shatter Styles */
+.glitch-char {
+    display: inline-block;
+    position: relative;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); /* Slow recovery floating back */
+}
+
+.glitch-char.broken {
+    transition: transform 0.1s cubic-bezier(0.16, 1, 0.3, 1); /* Fast drift apart on impact */
+    -webkit-text-fill-color: transparent !important;
+    color: transparent !important;
+}
+
+.char-d.broken {
+    transform: translate(-5px, -3px) rotate(-12deg);
+}
+
+.char-e.broken {
+    transform: translate(1px, 4px) rotate(8deg) scale(0.9);
+}
+
+.char-v.broken {
+    transform: translate(6px, -2px) rotate(15deg);
+}
+
+/* 🧊 Letter Shatter Pieces Styles (Diagonal cracked pieces) */
+.char-piece {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    opacity: 0;
+    pointer-events: none;
+    -webkit-text-fill-color: inherit;
+    color: inherit;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.1s ease;
+}
+
+.glitch-char.broken .char-piece {
+    opacity: 1;
+    transition: transform 0.1s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.1s ease;
+}
+
+/* Diagonal split paths for letter halves */
+.char-piece.piece-1 {
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+.char-piece.piece-2 {
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+
+/* Piece-specific shatter offsets */
+.char-d.broken .piece-1 {
+    transform: translate(-6px, -3px) rotate(-10deg);
+    -webkit-text-stroke: 1.5px #ff00ff;
+}
+.char-d.broken .piece-2 {
+    transform: translate(3px, 4px) rotate(6deg);
+    -webkit-text-stroke: 1.5px #00ffff;
+}
+
+.char-e.broken .piece-1 {
+    transform: translate(-4px, 5px) rotate(-8deg);
+    -webkit-text-stroke: 1.5px #ffff00;
+}
+.char-e.broken .piece-2 {
+    transform: translate(6px, -3px) rotate(10deg);
+    -webkit-text-stroke: 1.5px #ff0055;
+}
+
+.char-v.broken .piece-1 {
+    transform: translate(-5px, -3px) rotate(-6deg);
+    -webkit-text-stroke: 1.5px #00ff00;
+}
+.char-v.broken .piece-2 {
+    transform: translate(7px, 3px) rotate(12deg);
+    -webkit-text-stroke: 1.5px #00ffff;
+}
+
+/* 🚀 Startup Slow Spread Cinematic Styles */
+#dev-text.slow-spread .char-piece {
+    transition: transform 3s cubic-bezier(0.1, 0.8, 0.2, 1), opacity 1.5s ease;
+}
+
+#dev-text.slow-spread .char-d.broken .piece-1 {
+    transform: translate(-180px, -120px) rotate(-45deg);
+}
+#dev-text.slow-spread .char-d.broken .piece-2 {
+    transform: translate(120px, 150px) rotate(35deg);
+}
+
+#dev-text.slow-spread .char-e.broken .piece-1 {
+    transform: translate(-140px, 160px) rotate(-30deg);
+}
+#dev-text.slow-spread .char-e.broken .piece-2 {
+    transform: translate(180px, -110px) rotate(45deg);
+}
+
+#dev-text.slow-spread .char-v.broken .piece-1 {
+    transform: translate(-150px, -150px) rotate(-40deg);
+}
+#dev-text.slow-spread .char-v.broken .piece-2 {
+    transform: translate(160px, 130px) rotate(50deg);
+}
+
+/* 🧊 4-Slice Splicing Styles (Diagonal cracked slices) */
+.glitch-slice {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    opacity: 0;
+    pointer-events: none;
+    -webkit-text-fill-color: transparent;
+}
+
+.slice-1 {
+    clip-path: polygon(0 0, 100% 0, 100% 30%, 60% 15%, 0 35%);
+    animation: slice1-anim 1.5s infinite;
+}
+.slice-2 {
+    clip-path: polygon(0 35%, 60% 15%, 100% 30%, 100% 55%, 40% 45%, 0 60%);
+    animation: slice2-anim 1.5s infinite;
+}
+.slice-3 {
+    clip-path: polygon(0 60%, 40% 45%, 100% 55%, 100% 80%, 70% 70%, 0 85%);
+    animation: slice3-anim 1.5s infinite;
+}
+.slice-4 {
+    clip-path: polygon(0 85%, 70% 70%, 100% 80%, 100% 100%, 0 100%);
+    animation: slice4-anim 1.5s infinite;
+}
+
+/* 🌀 Logo Container Vibration Shake style */
+.logo-text.shake-glitch {
+    animation: logo-shake 0.1s infinite;
+}
+
+@keyframes logo-shake {
+    0% { transform: translate(0, 0) skew(0deg); }
+    20% { transform: translate(-1px, 0.5px) skew(-1.5deg); }
+    40% { transform: translate(-1px, -0.5px) skew(1deg); }
+    60% { transform: translate(1px, 0.5px) skew(0deg); }
+    80% { transform: translate(1px, -0.5px) skew(-1deg); }
+    100% { transform: translate(0, 0) skew(0deg); }
+}
+
+#dev-text.active-glitch {
+    animation: cool-glitch 1.5s infinite;
+}
+
+@keyframes cool-glitch {
+    0%, 19.9%, 46.8%, 69.9%, 90.1%, 100% {
+        color: #000000;
+        -webkit-text-fill-color: #000000;
+        -webkit-text-stroke: 0px transparent;
+        transform: skew(0deg) translate(0);
+        text-shadow: none;
+    }
+    20.0% {
+        color: #ffffff;
+        -webkit-text-fill-color: #ffffff;
+        -webkit-text-stroke: 0px transparent;
+        transform: skew(-12deg) translate(-2px, 0);
+        text-shadow: 2px 0 rgba(0, 255, 255, 0.8), -2px 0 rgba(255, 0, 255, 0.8);
+    }
+    28.0% {
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+        -webkit-text-stroke: 1.5px #000000;
+        transform: skew(12deg) translate(2px, 0);
+        text-shadow: -2px 0 rgba(255, 0, 255, 0.8), 2px 0 rgba(0, 255, 255, 0.8);
+    }
+    36.0% {
+        color: #ffffff;
+        -webkit-text-fill-color: #ffffff;
+        -webkit-text-stroke: 0px transparent;
+        transform: skew(-5deg) translate(-1px, 0);
+    }
+    44.0% {
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+        -webkit-text-stroke: 1.5px #000000;
+        transform: skew(5deg) translate(1px, 0);
+    }
+    70.0% {
+        color: #ffffff;
+        -webkit-text-fill-color: #ffffff;
+        -webkit-text-stroke: 0px transparent;
+        transform: skew(8deg) translate(1px, 0);
+    }
+    80.0% {
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+        -webkit-text-stroke: 1.5px #000000;
+        transform: skew(-8deg) translate(-1px, 0);
+    }
+    88.0% {
+        color: #ffffff;
+        -webkit-text-fill-color: #ffffff;
+        -webkit-text-stroke: 0px transparent;
+        transform: skew(4deg) translate(1px, 0);
+    }
+}
+
+/* Slice 1 keyframes (Top 25% - Neon Magenta / Red Split) */
+@keyframes slice1-anim {
+    0%, 19.9%, 46.8%, 69.9%, 90.1%, 100% {
+        opacity: 0;
+        transform: translate(0);
+    }
+    20.0%, 28.0%, 36.0%, 44.0%, 70.0%, 80.0%, 88.0% {
+        opacity: 1;
+        -webkit-text-stroke: 1.5px #ff00ff;
+        transform: translate(-4px, -1px);
+        text-shadow: 2px 0 rgba(255, 0, 0, 0.8);
+    }
+}
+
+/* Slice 2 keyframes (25%-50% - Neon Cyan / Blue Split) */
+@keyframes slice2-anim {
+    0%, 19.9%, 46.8%, 69.9%, 90.1%, 100% {
+        opacity: 0;
+        transform: translate(0);
+    }
+    20.0%, 28.0%, 36.0%, 44.0%, 70.0%, 80.0%, 88.0% {
+        opacity: 1;
+        -webkit-text-stroke: 1.5px #00ffff;
+        transform: translate(4px, 1px);
+        text-shadow: -2px 0 rgba(0, 0, 255, 0.8);
+    }
+}
+
+/* Slice 3 keyframes (50%-75% - Neon Yellow / Green Split) */
+@keyframes slice3-anim {
+    0%, 19.9%, 46.8%, 69.9%, 90.1%, 100% {
+        opacity: 0;
+        transform: translate(0);
+    }
+    20.0%, 28.0%, 36.0%, 44.0%, 70.0%, 80.0%, 88.0% {
+        opacity: 1;
+        -webkit-text-stroke: 1.5px #ffff00;
+        transform: translate(-2px, 2px);
+        text-shadow: 2px 0 rgba(0, 255, 0, 0.8);
+    }
+}
+
+/* Slice 4 keyframes (Bottom 25% - Neon Red / Purple Split) */
+@keyframes slice4-anim {
+    0%, 19.9%, 46.8%, 69.9%, 90.1%, 100% {
+        opacity: 0;
+        transform: translate(0);
+    }
+    20.0%, 28.0%, 36.0%, 44.0%, 70.0%, 80.0%, 88.0% {
+        opacity: 1;
+        -webkit-text-stroke: 1.5px #ff0055;
+        transform: translate(3px, -2px);
+        text-shadow: -2px 0 rgba(128, 0, 128, 0.8);
+    }
+}
+

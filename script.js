@@ -12,19 +12,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 2. 📑 Tab Navigation Logic
-    const tabButtons = document.querySelectorAll('.tab-btn');
+    // 2. 📑 Tab Navigation Logic (via macOS Dock)
+    const dockItems = document.querySelectorAll('.dock-item[data-tab]');
     const tabContents = document.querySelectorAll('.tab-content');
 
-    tabButtons.forEach(button => {
+    dockItems.forEach(button => {
         button.addEventListener('click', () => {
             const targetTab = button.getAttribute('data-tab');
 
-            // Deactivate all buttons & contents
-            tabButtons.forEach(btn => btn.classList.remove('active'));
+            // Deactivate all dock tab items & contents
+            dockItems.forEach(btn => btn.classList.remove('active'));
             tabContents.forEach(content => content.classList.remove('active'));
 
-            // Activate current button & content
+            // Activate current dock item & content
             button.classList.add('active');
             const targetEl = document.getElementById(targetTab);
             if (targetEl) {
@@ -83,7 +83,21 @@ document.addEventListener('DOMContentLoaded', () => {
             toast_fail: "Could not open Messenger. Try the button below.",
             toast_err: "Something went wrong. Please try again.",
             toast_lang: "Language switched to: English",
-            cv_toast: "CV/Resume is available upon request. Contact Penhpich Bormey."
+            cv_toast: "CV/Resume is available upon request. Contact Penhpich Bormey.",
+            email_picker_title: "Choose Email Client",
+            email_picker_gmail: "Gmail (Web)",
+            email_picker_default: "Default Mail App",
+            email_picker_copy: "Copy Email Address",
+            email_copied: "Email address copied to clipboard!",
+            dock_connect: "Connect",
+            dock_lang: "Switch Language",
+            connect_picker_title: "Let's Connect",
+            connect_telegram: "Telegram Messenger",
+            connect_messenger: "Facebook Messenger",
+            connect_cv: "Request CV / Resume",
+            lang_picker_title: "Select Language",
+            toast_privacy_on: "Privacy Mode Enabled (Profile Blurred)",
+            toast_privacy_off: "Privacy Mode Disabled"
         },
         kh: {
             get_in_touch: "ទាក់ទងមកខ្ញុំ",
@@ -133,7 +147,21 @@ document.addEventListener('DOMContentLoaded', () => {
             toast_fail: "មិនអាចបើក Messenger។ សូមចុចប៊ូតខាងក្រោម។",
             toast_err: "មានបញ្ហា។ សូមព្យាយាមម្តងទៀត។",
             toast_lang: "ភាសាត្រូវបានប្តូរទៅ៖ ភាសាខ្មែរ",
-            cv_toast: "ប្រវត្តិរូបសង្ខេប (CV/Resume) អាចស្នើសុំបានដោយផ្ទាល់។ សូមទាក់ទង Penhpich Bormey។"
+            cv_toast: "ប្រវត្តិរូបសង្ខេប (CV/Resume) អាចស្នើសុំបានដោយផ្ទាល់។ សូមទាក់ទង Penhpich Bormey។",
+            email_picker_title: "ជ្រើសរើសកម្មវិធីអ៊ីមែល",
+            email_picker_gmail: "Gmail (វេបសាយ)",
+            email_picker_default: "កម្មវិធីអ៊ីមែលលំនាំដើម",
+            email_picker_copy: "ចម្លងអាសយដ្ឋានអ៊ីមែល",
+            email_copied: "បានចម្លងអាសយដ្ឋានអ៊ីមែលរួចរាល់!",
+            dock_connect: "ទំនាក់ទំនង",
+            dock_lang: "ប្តូរភាសា",
+            connect_picker_title: "ទំនាក់ទំនងមកខ្ញុំ",
+            connect_telegram: "តេឡេក្រាម",
+            connect_messenger: "ហ្វេសប៊ុក មេសេនជ័រ",
+            connect_cv: "ស្នើសុំប្រវត្តិរូបសង្ខេប",
+            lang_picker_title: "ជ្រើសរើសភាសា",
+            toast_privacy_on: "របៀបឯកជនភាពត្រូវបានបើក (ព័ត៌មានត្រូវបានបិទបាំង)",
+            toast_privacy_off: "របៀបឯកជនភាពត្រូវបានបិទ"
         }
     };
 
@@ -193,14 +221,60 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize language
     applyLanguage(currentLang);
 
-    // Lang Switcher Event
+    // Lang Switcher Event -> Open Language Modal
+    const langModal = document.getElementById('lang-modal');
     const langSwitcher = document.getElementById('lang-switcher');
-    if (langSwitcher) {
-        langSwitcher.addEventListener('click', () => {
-            const targetLang = currentLang === 'en' ? 'kh' : 'en';
-            applyLanguage(targetLang);
-            showToast(translations[targetLang].toast_lang, 'success');
+    const dockLangBtn = document.getElementById('dock-lang-btn');
+    const langModalCloseBtn = document.getElementById('lang-modal-close-btn');
+    const langEnBtn = document.getElementById('lang-en-btn');
+    const langKhBtn = document.getElementById('lang-kh-btn');
+
+    if (langModal) {
+        const openLangModal = (e) => {
+            if (e) e.preventDefault();
+            langModal.classList.add('active');
+        };
+
+        const closeLangModal = () => {
+            langModal.classList.remove('active');
+        };
+
+        if (langSwitcher) {
+            langSwitcher.addEventListener('click', openLangModal);
+        }
+        if (dockLangBtn) {
+            dockLangBtn.addEventListener('click', openLangModal);
+        }
+
+        if (langModalCloseBtn) {
+            langModalCloseBtn.addEventListener('click', closeLangModal);
+        }
+
+        langModal.addEventListener('click', (e) => {
+            if (e.target === langModal) {
+                closeLangModal();
+            }
         });
+
+        if (langEnBtn) {
+            langEnBtn.addEventListener('click', () => {
+                if (currentLang !== 'en') {
+                    applyLanguage('en');
+                    showToast(translations['en'].toast_lang, 'success');
+                }
+                closeLangModal();
+            });
+        }
+
+        if (langKhBtn) {
+            langKhBtn.addEventListener('click', () => {
+                if (currentLang !== 'kh') {
+                    applyLanguage('kh');
+                    showToast(translations['kh'].toast_lang, 'success');
+                }
+                closeLangModal();
+            });
+        }
     }
 
     // 4. ✉️ Contact Form → Open Messenger
@@ -246,54 +320,296 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 5. 📄 PDF Resume Action (Show owner info/message instead of loading file)
-    const resumeLink = document.getElementById('resume-link');
-    if (resumeLink) {
-        resumeLink.addEventListener('click', (e) => {
+    // 5. ✉️ Unified Contact/Connect Modal Action
+    const connectModal = document.getElementById('connect-modal');
+    const connectLink = document.getElementById('email-link'); // card email icon
+    const resumeLink = document.getElementById('resume-link'); // card resume icon
+    const dockConnectBtn = document.getElementById('dock-connect-btn'); // dock icon
+    
+    const connectModalCloseBtn = document.getElementById('connect-modal-close-btn');
+    
+    const gmailOptionBtn = document.getElementById('gmail-option-btn');
+    const defaultOptionBtn = document.getElementById('default-option-btn');
+    const copyOptionBtn = document.getElementById('copy-option-btn');
+    const cvOptionBtn = document.getElementById('cv-option-btn');
+    const targetEmail = 'pichpenhbormey383@gmail.com';
+
+    if (connectModal) {
+        const openConnectModal = (e) => {
             e.preventDefault();
-            showToast(translations[currentLang].cv_toast, 'success');
-        });
-    }
+            connectModal.classList.add('active');
+        };
 
-    // 6. 🎨 Random color shifting loop for "DEV" text
-    const devText = document.getElementById('dev-text');
-    if (devText) {
-        const colors = [
-            '#00ffff', // Cyan
-            '#ff00ff', // Pink
-            '#9d4edd', // Purple
-            '#82c91e', // Soft Green
-            '#ff922b', // Soft Orange
-            '#ff8787', // Soft Red
-            '#4dabf7', // Soft Blue
-            '#e6e6e6'  // Off-white
-        ];
-        
-        function changeColor() {
-            let randomColor;
-            do {
-                randomColor = colors[Math.floor(Math.random() * colors.length)];
-            } while (randomColor === devText.style.color);
-            
-            devText.style.color = randomColor;
+        const closeConnectModal = () => {
+            connectModal.classList.remove('active');
+        };
+
+        // Open triggers
+        if (connectLink) connectLink.addEventListener('click', openConnectModal);
+        if (resumeLink) resumeLink.addEventListener('click', openConnectModal);
+        if (dockConnectBtn) dockConnectBtn.addEventListener('click', openConnectModal);
+
+        // Close triggers
+        if (connectModalCloseBtn) {
+            connectModalCloseBtn.addEventListener('click', closeConnectModal);
         }
-        
-        changeColor();
-        setInterval(changeColor, 1500);
-    }
-
-    // 7. 🏝️ Navbar Auto-Morphing Scroll Event
-    const navbar = document.querySelector('.glass-navbar');
-    if (navbar) {
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 40) {
-                navbar.classList.add('island-mode');
-            } else {
-                navbar.classList.remove('island-mode');
+        connectModal.addEventListener('click', (e) => {
+            if (e.target === connectModal) {
+                closeConnectModal();
             }
         });
+
+        // Options actions inside the modal:
+        // Note: Telegram & Messenger are standard <a> links, so they navigate natively.
+
+        // Gmail Option
+        if (gmailOptionBtn) {
+            gmailOptionBtn.addEventListener('click', () => {
+                window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${targetEmail}`, '_blank');
+                closeConnectModal();
+            });
+        }
+
+        // Default Client Option
+        if (defaultOptionBtn) {
+            defaultOptionBtn.addEventListener('click', () => {
+                window.location.href = `mailto:${targetEmail}`;
+                closeConnectModal();
+            });
+        }
+
+        // Copy Option
+        if (copyOptionBtn) {
+            copyOptionBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(targetEmail).then(() => {
+                    showToast(translations[currentLang].email_copied, 'success');
+                }).catch(() => {
+                    // Fallback copy method
+                    const tempInput = document.createElement('input');
+                    tempInput.value = targetEmail;
+                    document.body.appendChild(tempInput);
+                    tempInput.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tempInput);
+                    showToast(translations[currentLang].email_copied, 'success');
+                });
+                closeConnectModal();
+            });
+        }
+
+        // CV / Resume Option
+        if (cvOptionBtn) {
+            cvOptionBtn.addEventListener('click', () => {
+                showToast(translations[currentLang].cv_toast, 'success');
+                closeConnectModal();
+            });
+        }
     }
 
+    // 6. 🎨 Hacker Character Swapping & Logo Shake (synchronized with CSS glitch)
+    const devText = document.getElementById('dev-text');
+    const brandText = document.querySelector('.logo-brand');
+    const logoContainer = document.querySelector('.logo-text');
+    const glitchSlices = document.querySelectorAll('.glitch-slice');
+    const glitchChars = document.querySelectorAll('.glitch-char');
+    
+    if (devText && logoContainer) {
+        const hackerChars = ['D3V', 'DΞV', 'D_V', 'DØV', 'D%V', '[D]', 'DΞV', 'DV_'];
+        
+        const setGlitchText = (text) => {
+            if (glitchChars.length === 3) {
+                for (let i = 0; i < 3; i++) {
+                    const charNode = glitchChars[i];
+                    const newChar = text[i] || '';
+                    
+                    const baseNode = charNode.querySelector('.char-base');
+                    if (baseNode) {
+                        baseNode.textContent = newChar;
+                    }
+                    charNode.setAttribute('data-text', newChar);
+                    
+                    const pieces = charNode.querySelectorAll('.char-piece');
+                    pieces.forEach(piece => {
+                        piece.textContent = newChar;
+                        piece.setAttribute('data-text', newChar);
+                    });
+                }
+            }
+            glitchSlices.forEach(slice => {
+                slice.textContent = text;
+                slice.setAttribute('data-text', text);
+            });
+            devText.setAttribute('data-text', text);
+        };
 
+        const triggerLogoGlitchSpike = (duration) => {
+            if (brandText) brandText.classList.add('tremble');
+            logoContainer.classList.add('shake-glitch');
+            glitchChars.forEach(char => char.classList.add('broken'));
+            
+            let isSpikeActive = true;
+            let swaps = 0;
+            const swapInterval = setInterval(() => {
+                if (!isSpikeActive) return;
+                const randomLogoChar = hackerChars[Math.floor(Math.random() * hackerChars.length)];
+                setGlitchText(randomLogoChar);
+                swaps++;
+                if (swaps > 3) {
+                    isSpikeActive = false;
+                    clearInterval(swapInterval);
+                }
+            }, 30);
+
+            setTimeout(() => {
+                isSpikeActive = false;
+                clearInterval(swapInterval);
+                if (brandText) brandText.classList.remove('tremble');
+                logoContainer.classList.remove('shake-glitch');
+                glitchChars.forEach(char => char.classList.remove('broken'));
+                setGlitchText('DEV');
+            }, duration);
+        };
+
+        const startRegularGlitchLoop = () => {
+            setInterval(() => {
+                setTimeout(() => {
+                    triggerLogoGlitchSpike(400); // 400ms duration (highly visible)
+                }, 300);
+                setTimeout(() => {
+                    triggerLogoGlitchSpike(300); // 300ms duration
+                }, 1050);
+            }, 1500);
+        };
+
+        // 🚀 Startup Slow Spread Cinematic (Only 1 Time)
+        const triggerStartupSlowSpread = () => {
+            let isStartupActive = true;
+            devText.classList.add('slow-spread');
+            glitchChars.forEach(char => char.classList.add('broken'));
+            if (brandText) brandText.classList.add('tremble');
+            logoContainer.classList.add('shake-glitch');
+
+            const swapInterval = setInterval(() => {
+                if (!isStartupActive) return;
+                const randomLogoChar = hackerChars[Math.floor(Math.random() * hackerChars.length)];
+                setGlitchText(randomLogoChar);
+            }, 250);
+
+            setTimeout(() => {
+                isStartupActive = false;
+                clearInterval(swapInterval);
+                devText.classList.remove('slow-spread');
+                glitchChars.forEach(char => char.classList.remove('broken'));
+                if (brandText) brandText.classList.remove('tremble');
+                logoContainer.classList.remove('shake-glitch');
+                setGlitchText('DEV');
+
+                setTimeout(() => {
+                    startRegularGlitchLoop();
+                }, 600);
+            }, 3000);
+        };
+
+        // Start startup sequence on load
+        setTimeout(triggerStartupSlowSpread, 500);
+    }
+
+    // 7. 🖥️ macOS Dock Interactive Fisheye Zoom Effect
+    const dock = document.getElementById('mac-dock');
+    const allDockItems = document.querySelectorAll('.dock-item');
+    
+    if (dock) {
+        dock.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX;
+            
+            allDockItems.forEach(item => {
+                const rect = item.getBoundingClientRect();
+                const itemCenterX = rect.left + rect.width / 2;
+                const dist = Math.abs(mouseX - itemCenterX);
+                
+                // Fisheye zone of influence (150px)
+                if (dist < 150) {
+                    const scale = 1 + 0.35 * Math.pow((150 - dist) / 150, 2);
+                    item.style.transform = `scale(${scale})`;
+                    item.style.margin = `0 ${6 * Math.pow((150 - dist) / 150, 2)}px`;
+                } else {
+                    item.style.transform = 'scale(1)';
+                    item.style.margin = '0';
+                }
+            });
+        });
+        
+        dock.addEventListener('mouseleave', () => {
+            allDockItems.forEach(item => {
+                item.style.transform = 'scale(1)';
+                item.style.margin = '0';
+            });
+        });
+    }
+
+    // 8. 🖥️ macOS Dock Auto-Hide / Auto-Show (Scroll & Hover based)
+    const dockContainer = document.querySelector('.mac-dock-container');
+    if (dockContainer && dock) {
+        let lastScrollY = window.scrollY;
+        let hideTimeout;
+        let isMouseNearBottom = false;
+        let isMouseOverDock = false;
+
+        const updateDockVisibility = () => {
+            const currentScrollY = window.scrollY;
+            const isScrollingUp = currentScrollY < lastScrollY;
+            const isAtTop = currentScrollY < 10;
+            const isAtBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 10);
+
+            // If mouse is near bottom/over dock, OR scrolling up, OR at top, OR at bottom -> Show it!
+            if (isMouseNearBottom || isMouseOverDock || isScrollingUp || isAtTop || isAtBottom) {
+                dockContainer.classList.remove('dock-hidden');
+            } else {
+                // Otherwise, hide it (when scrolling down, for example)
+                dockContainer.classList.add('dock-hidden');
+            }
+            
+            lastScrollY = currentScrollY;
+        };
+
+        // Scroll listener (active on all viewports for scroll reveals)
+        window.addEventListener('scroll', updateDockVisibility, { passive: true });
+
+        // Mouse movement listeners (only on desktop hover-capable viewports)
+        if (window.matchMedia('(hover: hover)').matches) {
+            document.addEventListener('mousemove', (e) => {
+                const viewportHeight = window.innerHeight;
+                const mouseY = e.clientY;
+                
+                isMouseNearBottom = (viewportHeight - mouseY) < 50;
+                isMouseOverDock = dockContainer.contains(e.target);
+
+                if (isMouseNearBottom || isMouseOverDock) {
+                    clearTimeout(hideTimeout);
+                    dockContainer.classList.remove('dock-hidden');
+                } else {
+                    clearTimeout(hideTimeout);
+                    hideTimeout = setTimeout(() => {
+                        updateDockVisibility();
+                    }, 400); // 400ms delay for smooth mouse exits
+                }
+            });
+        }
+    }
+
+    // 9. 🔒 Stealth Privacy Mode (Double-click anywhere to blur)
+    document.addEventListener('dblclick', (e) => {
+        // Exclude double-clicks on interactive elements
+        if (e.target.closest('button, a, input, textarea, select, .mac-dock, .modal, .modal-content')) {
+            return;
+        }
+        
+        const isPrivacyActive = document.body.classList.toggle('privacy-active');
+        if (isPrivacyActive) {
+            showToast(translations[currentLang].toast_privacy_on, 'info');
+        } else {
+            showToast(translations[currentLang].toast_privacy_off, 'info');
+        }
+    });
 
 });
